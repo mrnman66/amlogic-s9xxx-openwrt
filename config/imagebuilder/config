@@ -528,7 +528,6 @@ CONFIG_BUSYBOX_DEFAULT_FALLOCATE=y
 CONFIG_PACKAGE_kmod-usb-net-cdc-mbim=y
 CONFIG_PACKAGE_kmod-usb-serial-ch341=y
 CONFIG_PACKAGE_kmod-usb-serial-qualcomm=y
-CONFIG_PACKAGE_kmod-mt7921u=y
 CONFIG_PACKAGE_kmod-bluetooth=y
 CONFIG_PACKAGE_bluez-utils=y
 CONFIG_PACKAGE_libfuse1=y
