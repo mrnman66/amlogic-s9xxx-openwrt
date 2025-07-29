@@ -527,4 +527,7 @@ CONFIG_PACKAGE_luci-i18n-wol-ru=y
 #
 # 4. Other Configuration
 CONFIG_BUSYBOX_DEFAULT_FALLOCATE=y
+CONFIG_PACKAGE_umbim=y
+CONFIG_PACKAGE_luci-proto-mbim=y
+CONFIG_PACKAGE_kmod-mt7921u=y
 # end of 4. Other Configuration
