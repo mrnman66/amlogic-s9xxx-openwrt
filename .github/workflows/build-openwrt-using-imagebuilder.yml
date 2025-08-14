@@ -263,6 +263,7 @@ jobs:
           sudo rm -rf ~/{.cargo,.dotnet,.rustup}
           sudo timedatectl set-timezone "${TZ}"
           echo "status=success" >> ${GITHUB_OUTPUT}
+
       - name: Create simulated physical disk
         run: |
           mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
@@ -280,6 +281,7 @@ jobs:
           sudo mount /dev/github/runner /builder
           sudo chown -R runner.runner /builder
           df -Th
+
       - name: Build OpenWrt Rootfs [ ${{ inputs.releases_branch }} ]
         id: imagebuilder
         if: ${{ steps.init.outputs.status }} == 'success' && !cancelled()
@@ -290,6 +292,7 @@ jobs:
           echo "RELEASES_TAG=${RELEASES_BRANCH/:/_}" >> ${GITHUB_ENV}
           echo "build_tag=OpenWrt_imagebuilder_${{ env.RELEASES_TAG }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
           echo "status=success" >> ${GITHUB_OUTPUT}
+
       - name: Clear server space
         id: clean
         if: ${{ steps.imagebuilder.outputs.status }} == 'success' && !cancelled()
@@ -299,7 +302,8 @@ jobs:
           if ls bin/targets/*/*/*rootfs.tar.gz 2>/dev/null; then
             cp -f bin/targets/*/*/*rootfs.tar.gz output/
           else
-            echo "Warning: rootfs.tar.gz not found!"
+            echo "❌ Error: rootfs.tar.gz not found after build!"
+            exit 1
           fi
           cp -f .config output/config
           rm -rf $(ls . | grep -v "^output$" | xargs) 2>/dev/null
@@ -310,6 +314,7 @@ jobs:
           ln -sf /builder/openwrt /home/runner/work/_actions/ophub/amlogic-s9xxx-openwrt/main/openwrt
           df -hT ${PWD}
           echo "status=success" >> ${GITHUB_OUTPUT}
+
       - name: Upload OpenWrt to Release
         uses: ncipollo/release-action@main
         if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
@@ -321,11 +326,23 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Packaging OpenWrt
+      - name: Find OpenWrt rootfs file
+        id: find_rootfs
         if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
+        run: |
+          FILE=$(find imagebuilder/output -name "*rootfs.tar.gz" | head -n1)
+          if [ -z "$FILE" ]; then
+            echo "❌ Error: No *rootfs.tar.gz file found in imagebuilder/output/"
+            exit 1
+          fi
+          echo "📁 Found rootfs file: $FILE"
+          echo "openwrt_path=$FILE" >> $GITHUB_ENV
+
+      - name: Packaging OpenWrt
+        if: ${{ steps.find_rootfs.outputs.status }} == 'success' && !cancelled()
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
-          openwrt_path: imagebuilder/output/*rootfs.tar.gz
+          openwrt_path: ${{ env.openwrt_path }}
           openwrt_board: ${{ inputs.openwrt_board }}
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
