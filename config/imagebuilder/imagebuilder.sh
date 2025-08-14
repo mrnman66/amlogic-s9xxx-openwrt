@@ -89,11 +89,16 @@ adjust_settings() {
         sed -i "s|CONFIG_TARGET_ROOTFS_EXT4FS=.*|# CONFIG_TARGET_ROOTFS_EXT4FS is not set|g" .config
         sed -i "s|CONFIG_TARGET_ROOTFS_SQUASHFS=.*|# CONFIG_TARGET_ROOTFS_SQUASHFS is not set|g" .config
         sed -i "s|CONFIG_TARGET_IMAGES_GZIP=.*|# CONFIG_TARGET_IMAGES_GZIP is not set|g" .config
+        # Enable CONFIG_TARGET_ROOTFS_TARGZ in .config
+        sed -i "s|CONFIG_TARGET_ROOTFS_TARGZ=.*|CONFIG_TARGET_ROOTFS_TARGZ=y|g" .config 
     else
         echo -e "${INFO} [ ${imagebuilder_path} ] directory status: $(ls -al 2>/dev/null)"
         error_msg "There is no .config file in the [ ${download_file} ]"
     fi
-
+    
+    
+    
+        
     # For other files
     # ......
 
