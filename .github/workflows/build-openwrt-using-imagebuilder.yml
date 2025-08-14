@@ -286,10 +286,6 @@ jobs:
         run: |
           RELEASES_BRANCH="${{ inputs.releases_branch }}"
           chmod +x ${IMAGEBUILDER_SH}
-          # Enable CONFIG_TARGET_ROOTFS_TARGZ in .config
-          cd imagebuilder
-          sed -i '/CONFIG_TARGET_ROOTFS_TARGZ/s/.*/CONFIG_TARGET_ROOTFS_TARGZ=y/' .config || echo "CONFIG_TARGET_ROOTFS_TARGZ=y" >> .config
-          cd ..
           ${IMAGEBUILDER_SH} ${RELEASES_BRANCH} | tee build.log
           echo "RELEASES_TAG=${RELEASES_BRANCH/:/_}" >> ${GITHUB_ENV}
           echo "build_tag=OpenWrt_imagebuilder_${{ env.RELEASES_TAG }}_$(date +"%Y.%m")" >> ${GITHUB_OUTPUT}
