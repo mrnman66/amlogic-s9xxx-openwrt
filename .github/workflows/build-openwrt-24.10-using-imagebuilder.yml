@@ -1,12 +1,4 @@
-#=====================================================================================
-# https://github.com/ophub/amlogic-s9xxx-openwrt
-# Description:   Build OpenWrt using ImageBuilder
-# Instructions:  https://openwrt.org/docs/guide-user/additional-software/imagebuilder
-# Download from: https://downloads.openwrt.org/releases
-#                https://downloads.immortalwrt.org/releases
-#=====================================================================================
-
-name: Build OpenWrt using ImageBuilder
+name: Build Openwrt/Immortalwrt 24.10 using ImageBuilder
 
 on:
   repository_dispatch:
