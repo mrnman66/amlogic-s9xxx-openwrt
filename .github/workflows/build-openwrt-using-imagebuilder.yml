@@ -1,4 +1,4 @@
-name: Build OpenWrt using ImageBuilder
+name: Build Openwrt/Immortalwrt 23.05 using ImageBuilder
 
 on:
   repository_dispatch:
@@ -10,15 +10,12 @@ on:
         default: "immortalwrt:23.05.4"
         type: choice
         options:
-          - openwrt:24.10.2
-          - openwrt:24.10.1
-          - openwrt:24.10.0
           - immortalwrt:23.05.4
           - immortalwrt:23.05.5
           - immortalwrt:23.05.6
-          - immortalwrt:24.10.2
-          - immortalwrt:24.10.1
-          - immortalwrt:24.10.0
+          - openwrt:23.05.4
+          - openwrt:23.05.5
+          - openwrt:23.05.6
       openwrt_board:
         description: "Select device board"
         required: false
@@ -234,7 +231,7 @@ on:
 
 env:
   TZ: America/New_York
-  IMAGEBUILDER_SH: config/imagebuilder/imagebuilder.sh
+  IMAGEBUILDER_SH: config/imagebuilder/imagebuilder_23.05.sh
 
 jobs:
   build:
