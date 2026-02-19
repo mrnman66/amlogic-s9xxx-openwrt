@@ -68,7 +68,12 @@ download_imagebuilder() {
     echo -e "${STEPS} Start downloading OpenWrt files..."
 
     # Downloading imagebuilder files
-    download_file="https://downloads.${op_sourse}.org/releases/${op_branch}/targets/armsr/armv8/${op_sourse}-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.zst"
+    if [[ "${op_sourse}" == "immortalwrt" ]]; then
+        download_url="immortalwrt.kyarucloud.moe"
+    else
+        download_url="downloads.openwrt.org"
+    fi
+    download_file="https://${download_url}/releases/${op_branch}/targets/armsr/armv8/${op_sourse}-imagebuilder-${op_branch}-armsr-armv8.Linux-x86_64.tar.zst"
     curl -fsSOL ${download_file}
     [[ "${?}" -eq "0" ]] || error_msg "Download failed: [ ${download_file} ]"
 
@@ -125,11 +130,11 @@ custom_packages() {
     [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_plugin} ] download failed!"
     echo -e "${INFO} The [ ${amlogic_plugin} ] is downloaded successfully."
     #
-    amlogic_i18n="luci-i18n-amlogic"
-    amlogic_i18n_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_i18n}.*.ipk" | head -n 1)"
+    amlogic_i18n_cn="luci-i18n-amlogic-zh-cn"
+    amlogic_i18n_down="$(curl -s ${amlogic_api} | grep "browser_download_url" | grep -oE "https.*${amlogic_i18n_cn}.*.ipk" | head -n 1)"
     curl -fsSOJL ${amlogic_i18n_down}
-    [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_i18n} ] download failed!"
-    echo -e "${INFO} The [ ${amlogic_i18n} ] is downloaded successfully."
+    [[ "${?}" -eq "0" ]] || error_msg "[ ${amlogic_i18n_cn} ] download failed!"
+    echo -e "${INFO} The [ ${amlogic_i18n_cn} ] is downloaded successfully."
 
     # Download other luci-app-xxx
     # ......
