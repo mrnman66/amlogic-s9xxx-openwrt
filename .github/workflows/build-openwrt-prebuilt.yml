@@ -354,7 +354,6 @@ jobs:
         with:
           tag: ${{ env.build_tag }}
           artifacts: output/rootfs.tar.gz
-          artifactName: openwrt-${{ steps.download_rootfs.outputs.openwrt_version }}-rootfs.tar.gz
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
