@@ -1,4 +1,4 @@
-name: Build OpenWrt for Amlogic (Prebuilt Rootfs)
+name: Build OpenWrt using Prebuilt Rootfs
 
 on:
   repository_dispatch:
@@ -7,7 +7,7 @@ on:
       releases_branch:
         description: "Select OpenWrt version"
         required: true
-        default: "openwrt:24.10.5"
+        default: "openwrt:25.12.0"
         type: choice
         options:
           - openwrt:25.12.0
@@ -391,13 +391,15 @@ jobs:
             - **WIFI SSID**: `OpenWrt`
             - **WIFI Password**: `none`
             
-            ### Install to EMMC
-            1. Flash image to SD/USB
-            2. Boot device
-            3. Login to OpenWrt → `System` → `Amlogic Service` → `Install OpenWrt`
             
             ### Post-install packages
-            > Packages are not pre-installed. Install via `opkg` after flashing:
+            > Packages are not pre-installed. Install via package manager(apk/opkg) after flashing:
+            > For apk:
+            > ```bash
+            > apk update
+            > apk add <package-name>
+            > ```
+            > For opkg:
             > ```bash
             > opkg update
             > opkg install <package-name>
